@@ -94,14 +94,12 @@ public class NormalRule extends RuleBase implements Rule {
             // no match, or run/set only match
             return null;
         }
-        if ( queryStringAppend && hsRequest.getQueryString() != null && hsRequest.getQueryString().length() > 0) {
-            String target = ruleExecutionOutput.getReplacedUrl();
-            if (target.contains("?")) {
-                ruleExecutionOutput.setReplacedUrl(target + "&" + hsRequest.getQueryString());
-            } else {
-                ruleExecutionOutput.setReplacedUrl(target + "?" + hsRequest.getQueryString());
-            }
+        
+        if (queryStringAppend && hsRequest.getQueryString() != null) {
+            final String target = ruleExecutionOutput.getReplacedUrl();
+            ruleExecutionOutput.setReplacedUrl(target + (target.contains("?") ? "&" : "?") + hsRequest.getQueryString());
         }
+        
         if ( toServletContext != null ) ruleExecutionOutput.setReplacedUrlContext(toServletContext);
         return RuleExecutionOutput.getRewritenUrl(toType, encodeToUrl, ruleExecutionOutput);
     }
